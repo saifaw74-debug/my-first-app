@@ -8,66 +8,58 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      title: 'متجر سيف',
+      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Cairo'),
+      home: const LoginPage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
   @override
-  _HomePageState createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    final emailController = TextEditingController();
+    final passController = TextEditingController();
+    return Scaffold(
+      backgroundColor: Colors.blue[50],
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              const Icon(Icons.shopping_bag, size: 100, color: Colors.blue),
+              const SizedBox(height: 20),
+              const Text('متجر سيف', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 30),
+              TextField(controller: emailController, decoration: InputDecoration(labelText: 'الايميل', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)), filled: true, fillColor: Colors.white)),
+              const SizedBox(height: 15),
+              TextField(controller: passController, obscureText: true, decoration: InputDecoration(labelText: 'كلمة السر', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)), filled: true, fillColor: Colors.white)),
+              const SizedBox(height: 25),
+              SizedBox(width: double.infinity, height: 50, child: ElevatedButton(onPressed: () { Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomePage())); }, style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))), child: const Text('تسجيل دخول', style: TextStyle(fontSize: 18)))),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> {
-  String from = "العشار";
-  String to = "البراضعية";
-
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+  final List<Map<String, dynamic>> products = const [
+    {"name": "ايفون 15", "price": "1200\$", "icon": Icons.phone_iphone},
+    {"name": "لابتوب ديل", "price": "800\$", "icon": Icons.laptop},
+    {"name": "سماعة بلوتوث", "price": "50\$", "icon": Icons.headset},
+    {"name": "ساعة ذكية", "price": "150\$", "icon": Icons.watch},
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("تكسي البصرة"),
-        backgroundColor: Colors.yellow.shade700,
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Container(
-              height: 140,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.black12),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("من: $from", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 10),
-                  Text("الى: $to", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
-            const SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.black, foregroundColor: Colors.yellow),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("تم طلب التكسي بنجاح!"))
-                  );
-                },
-                child: const Text("احجز تكسي الان", style: TextStyle(fontSize: 18)),
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: AppBar(title: const Text('متجر سيف - الرئيسية'), centerTitle: true),
+      body: GridView.builder(padding: const EdgeInsets.all(16), gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 15), itemCount: 4, itemBuilder: (context, i) {
+        return Card(elevation: 5, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(products[i]["icon"], size: 50, color: Colors.blue), const SizedBox(height: 10), Text(products[i]["name"], style: const TextStyle(fontWeight: FontWeight.bold)), Text(products[i]["price"], style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold))]));
+      }),
     );
   }
 }
